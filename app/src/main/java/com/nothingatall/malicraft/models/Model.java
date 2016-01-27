@@ -2,11 +2,12 @@ package com.nothingatall.malicraft.models;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
+import com.nothingatall.malicraft.core.Faction;
 
 import java.util.Set;
 
 /**
- * Created by nothi on 1/26/2016.
+ * Created by nothingatall on 1/26/2016.
  */
 public class Model {
     public enum Level {
@@ -16,6 +17,7 @@ public class Model {
         MINION,
         PEON
     }
+
     public enum Status {
         LIVING,
         UNDEAD,
@@ -23,15 +25,7 @@ public class Model {
         LOST,
         MERCENARY
     }
-    public enum Faction {
-        GUILD,
-        RESURECTIONIST,
-        ARCANIST,
-        NEVERBORN,
-        OUTCAST,
-        GREMLIN,
-        TEN_THUNDER
-    }
+
     private final String mName;
     private final Iterable<Faction> mFactions;
     private final int mCost;
@@ -39,7 +33,7 @@ public class Model {
     private final Level mLevel;
     private final Iterable<Status> mStats;
 
-    private Model (String name, Iterable<Faction> faction, int cost, int cache, Level level, Iterable<Status> stats) {
+    private Model(String name, Iterable<Faction> faction, int cost, int cache, Level level, Iterable<Status> stats) {
         mName = name;
         mFactions = faction;
         mCost = cost;

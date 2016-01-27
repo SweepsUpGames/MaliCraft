@@ -1,13 +1,13 @@
 package com.nothingatall.malicraft.models;
 
+import com.nothingatall.malicraft.core.Faction;
 import com.nothingatall.malicraft.models.Model.Level;
-import com.nothingatall.malicraft.models.Model.Faction;
 import com.nothingatall.malicraft.models.Model.Status;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 /**
- * Created by nothi on 1/26/2016.
+ * Created by nothingatall on 1/26/2016.
  */
 public class ShittyModelDB implements Models {
     private final Iterable<Model> mDataBase;
@@ -36,8 +36,17 @@ public class ShittyModelDB implements Models {
                         .level(Level.ENFORCER)
                         .status(Status.LIVING)
                         .status(Status.MERCENARY)
+                        .build(),
+                new Model.Builder()
+                        .name("McMourning")
+                        .faction(Faction.RESURRECTIONIST)
+                        .faction(Faction.GUILD)
+                        .status(Status.LIVING)
+                        .level(Level.MASTER)
+                        .cache(4)
                         .build());
     }
+
     @Override
     public Iterable<Model> get() {
         return mDataBase;
@@ -45,9 +54,11 @@ public class ShittyModelDB implements Models {
 
     public class LevelFilter implements Predicate<Model> {
         private final Model.Level mLevel;
-        public LevelFilter (Model.Level level) {
+
+        public LevelFilter(Model.Level level) {
             mLevel = level;
         }
+
         @Override
         public boolean apply(Model model) {
             return model.is(mLevel);
@@ -56,9 +67,11 @@ public class ShittyModelDB implements Models {
 
     public class StatusFilter implements Predicate<Model> {
         private final Model.Status mStatus;
-        public StatusFilter (Model.Status status) {
+
+        public StatusFilter(Model.Status status) {
             mStatus = status;
         }
+
         @Override
         public boolean apply(Model model) {
             return model.is(mStatus);
@@ -67,9 +80,11 @@ public class ShittyModelDB implements Models {
 
     public class FactionFilter implements Predicate<Model> {
         private final Faction mFaction;
+
         public FactionFilter(Faction faction) {
             mFaction = faction;
         }
+
         @Override
         public boolean apply(Model model) {
             return model.is(mFaction);
