@@ -16,9 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.nothingatall.malicraft.core.FactionFragment;
+import com.nothingatall.malicraft.list.MaliCraftPresenter;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, MaliCraftView {
+
+    private FragmentManager mFragmentManager;
+    private MaliCraftPresenter mMaliCraftPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +49,14 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FragmentManager fm = getFragmentManager();
+        mFragmentManager = getFragmentManager();
+        mMaliCraftPresenter = new MaliCraftPresenter(this);
+    }
 
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.add(R.id.fragment_place, new FactionFragment());
-        ft.commit();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMaliCraftPresenter.startNewList();
     }
 
     @Override
@@ -107,5 +114,14 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void showFactionList(OnFactionChoiceListener onFactionChoiceListener) {
+        final FragmentTransaction ft = mFragmentManager.beginTransaction();
+        final FactionFragment factionFragment = new FactionFragment();
+        factionFragment.setFactionChoiceListener(onFactionChoiceListener);
+        ft.add(R.id.fragment_place, factionFragment);
+        ft.commit();
     }
 }

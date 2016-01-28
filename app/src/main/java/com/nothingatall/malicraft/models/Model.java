@@ -7,6 +7,8 @@ import com.nothingatall.malicraft.core.Faction;
 import java.util.Set;
 
 /**
+ * basic model for a model containing all relevant data for crew selection
+ *
  * Created by nothingatall on 1/26/2016.
  */
 public class Model {
@@ -23,21 +25,25 @@ public class Model {
         UNDEAD,
         CONSTRUCT,
         LOST,
-        MERCENARY
+        MERCENARY,
+        SHOWGIRL,
+        PUPPET
     }
 
     private final String mName;
     private final Iterable<Faction> mFactions;
     private final int mCost;
     private final int mCache;
+    private final int mRare;
     private final Level mLevel;
     private final Iterable<Status> mStats;
 
-    private Model(String name, Iterable<Faction> faction, int cost, int cache, Level level, Iterable<Status> stats) {
+    private Model(String name, Iterable<Faction> faction, int cost, int cache, Level level, Iterable<Status> stats, int rare) {
         mName = name;
         mFactions = faction;
         mCost = cost;
         mCache = cache;
+        mRare = rare;
         mLevel = level;
         mStats = stats;
     }
@@ -47,6 +53,7 @@ public class Model {
         private Set<Faction> mFactions = Sets.newHashSet();
         private int mCost = -1;
         private int mCache = -1;
+        private int mRare = -1;
         private Level mLevel = null;
         private Set<Status> mStats = Sets.newHashSet();
 
@@ -80,8 +87,13 @@ public class Model {
             return this;
         }
 
+        public Builder rare(int rare) {
+            mRare = rare;
+            return this;
+        }
+
         public Model build() {
-            return new Model(mName, mFactions, mCost, mCache, mLevel, mStats);
+            return new Model(mName, mFactions, mCost, mCache, mLevel, mStats, mRare);
         }
     }
 

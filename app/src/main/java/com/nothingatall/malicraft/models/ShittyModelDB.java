@@ -1,5 +1,7 @@
 package com.nothingatall.malicraft.models;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.nothingatall.malicraft.core.Faction;
 import com.nothingatall.malicraft.models.Model.Level;
 import com.nothingatall.malicraft.models.Model.Status;
@@ -7,6 +9,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 /**
+ * placeholder database to use until a more full one can be implemented
+ * <p/>
  * Created by nothingatall on 1/26/2016.
  */
 public class ShittyModelDB implements Models {
@@ -18,6 +22,7 @@ public class ShittyModelDB implements Models {
                         .name("Viktoria of Ash")
                         .faction(Faction.OUTCAST)
                         .cache(1)
+                        .rare(1)
                         .level(Level.MASTER)
                         .status(Status.LIVING)
                         .build(),
@@ -25,6 +30,7 @@ public class ShittyModelDB implements Models {
                         .name("Viktoria of Blood")
                         .faction(Faction.OUTCAST)
                         .cost(0)
+                        .rare(1)
                         .cache(1)
                         .level(Level.HENTCHMEN)
                         .status(Status.LIVING)
@@ -33,6 +39,7 @@ public class ShittyModelDB implements Models {
                         .name("Johan")
                         .faction(Faction.OUTCAST)
                         .cost(6)
+                        .rare(1)
                         .level(Level.ENFORCER)
                         .status(Status.LIVING)
                         .status(Status.MERCENARY)
@@ -44,12 +51,32 @@ public class ShittyModelDB implements Models {
                         .status(Status.LIVING)
                         .level(Level.MASTER)
                         .cache(4)
+                        .rare(1)
+                        .build(),
+                new Model.Builder()
+                        .name("Coryphee")
+                        .faction(Faction.ARCANIST)
+                        .level(Level.MINION)
+                        .cost(7)
+                        .status(Status.CONSTRUCT)
+                        .status(Status.PUPPET)
+                        .status(Status.SHOWGIRL)
+                        .rare(2)
                         .build());
     }
 
     @Override
     public Iterable<Model> get() {
         return mDataBase;
+    }
+
+    public ImmutableList<Model> getMasterOptions(Faction faction) {
+        return ImmutableList.copyOf(
+                Iterables.filter(
+                        mDataBase,
+                        new AndFilter(
+                                new LevelFilter(Level.MASTER),
+                                new FactionFilter(faction))));
     }
 
     public class LevelFilter implements Predicate<Model> {
@@ -88,6 +115,23 @@ public class ShittyModelDB implements Models {
         @Override
         public boolean apply(Model model) {
             return model.is(mFaction);
+        }
+    }
+
+    public class AndFilter implements Predicate<Model> {
+        private final Predicate<Model>[] mFilters;
+
+        public AndFilter(Predicate<Model>... filters) {
+            mFilters = filters;
+        }
+
+        @Override
+        public boolean apply(Model input) {
+            boolean results = false;
+            for (Predicate<Model> filter : mFilters) {
+                results = results || filter.apply(input);
+            }
+            return results;
         }
     }
 }
