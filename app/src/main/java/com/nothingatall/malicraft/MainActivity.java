@@ -1,10 +1,12 @@
 package com.nothingatall.malicraft;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,15 +16,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.nothingatall.malicraft.core.FactionFragment;
+import com.nothingatall.malicraft.list.CrewFragment;
+import com.nothingatall.malicraft.list.CrewList;
 import com.nothingatall.malicraft.list.MaliCraftPresenter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MaliCraftView {
-
     private FragmentManager mFragmentManager;
     private MaliCraftPresenter mMaliCraftPresenter;
+
+    private CrewFragment mCrewFragment = new CrewFragment();
+    private FactionFragment mFactionFragment = new FactionFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,11 +124,26 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void showCrewList(CrewList crewList, CrewFragment.CrewListener listener) {
+        mCrewFragment.initialize(crewList, listener);
+        setFragment(mCrewFragment);
+    }
+
+    @Override
     public void showFactionList(OnFactionChoiceListener onFactionChoiceListener) {
-        final FragmentTransaction ft = mFragmentManager.beginTransaction();
-        final FactionFragment factionFragment = new FactionFragment();
-        factionFragment.setFactionChoiceListener(onFactionChoiceListener);
-        ft.add(R.id.fragment_place, factionFragment);
-        ft.commit();
+        mFactionFragment.setFactionChoiceListener(onFactionChoiceListener);
+        setFragment(mFactionFragment);
+    }
+
+    @Override
+    public void logMessage(String message) {
+        Log.d("MaliCraft", message);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setFragment(Fragment fragment) {
+        final FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_place, fragment);
+        transaction.commit();
     }
 }

@@ -1,6 +1,7 @@
 package com.nothingatall.malicraft.core;
 
 /**
+ * Different factions that a list/model/upgrade can be
  * Created by nothingatall on 1/26/2016.
  */
 public enum Faction {
@@ -10,7 +11,8 @@ public enum Faction {
     NEVERBORN("Neverborn"),
     OUTCAST("Outcast"),
     GREMLIN("Gremlin"),
-    TEN_THUNDER("Ten Thunders");
+    TEN_THUNDER("Ten Thunders"),
+    UNKNOWN("Select Faction");
 
     private final String mName;
 
