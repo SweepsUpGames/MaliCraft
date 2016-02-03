@@ -8,13 +8,15 @@ import com.nothingatall.malicraft.models.Model.Status;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
+import java.util.List;
+
 /**
  * placeholder database to use until a more full one can be implemented
  * <p/>
  * Created by nothingatall on 1/26/2016.
  */
 public class ShittyModelDB implements Models {
-    private final Iterable<Model> mDataBase;
+    private final List<Model> mDataBase;
 
     public ShittyModelDB() {
         mDataBase = Lists.newArrayList(
@@ -66,16 +68,37 @@ public class ShittyModelDB implements Models {
     }
 
     @Override
-    public Iterable<Model> get() {
+    public List<Model> get() {
         return mDataBase;
     }
 
-    public ImmutableList<Model> getMasterOptions(Faction faction) {
+    @Override
+    public List<Model> getLeaders(int ss, Faction faction) {
+        final ImmutableList.Builder<Model> models = ImmutableList.builder();
+        if (ss >= 25) {
+            models.addAll(getMasterOptions(faction));
+        }
+        if (ss <= 40) {
+            models.addAll(getHenchmenOptions(faction));
+        }
+        return models.build();
+    }
+
+    private ImmutableList<Model> getMasterOptions(Faction faction) {
         return ImmutableList.copyOf(
                 Iterables.filter(
                         mDataBase,
                         new AndFilter(
                                 new LevelFilter(Level.MASTER),
+                                new FactionFilter(faction))));
+    }
+
+    private ImmutableList<Model> getHenchmenOptions(Faction faction) {
+        return ImmutableList.copyOf(
+                Iterables.filter(
+                        mDataBase,
+                        new AndFilter(
+                                new LevelFilter(Level.HENTCHMEN),
                                 new FactionFilter(faction))));
     }
 
@@ -127,9 +150,9 @@ public class ShittyModelDB implements Models {
 
         @Override
         public boolean apply(Model input) {
-            boolean results = false;
+            boolean results = true;
             for (Predicate<Model> filter : mFilters) {
-                results = results || filter.apply(input);
+                results = results && filter.apply(input);
             }
             return results;
         }

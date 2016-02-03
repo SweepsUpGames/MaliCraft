@@ -22,6 +22,10 @@ import com.nothingatall.malicraft.core.FactionFragment;
 import com.nothingatall.malicraft.list.CrewFragment;
 import com.nothingatall.malicraft.list.CrewList;
 import com.nothingatall.malicraft.list.MaliCraftPresenter;
+import com.nothingatall.malicraft.models.Model;
+import com.nothingatall.malicraft.models.ModelListFragment;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MaliCraftView {
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity
 
     private CrewFragment mCrewFragment = new CrewFragment();
     private FactionFragment mFactionFragment = new FactionFragment();
+    private ModelListFragment mModelListFragment = new ModelListFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +138,12 @@ public class MainActivity extends AppCompatActivity
     public void showFactionList(OnFactionChoiceListener onFactionChoiceListener) {
         mFactionFragment.setFactionChoiceListener(onFactionChoiceListener);
         setFragment(mFactionFragment);
+    }
+
+    @Override
+    public void showModelList(List<Model> modelList, ModelChoiceListener modelChoiceListener) {
+        mModelListFragment.initialize(modelList, modelChoiceListener);
+        setFragment(mModelListFragment);
     }
 
     @Override

@@ -4,8 +4,11 @@ import android.support.annotation.NonNull;
 
 import com.nothingatall.malicraft.MaliCraftView;
 import com.nothingatall.malicraft.core.Faction;
+import com.nothingatall.malicraft.models.Model;
 import com.nothingatall.malicraft.models.Models;
 import com.nothingatall.malicraft.models.ShittyModelDB;
+
+import java.util.List;
 
 /**
  * Presenter to control the application flow while creating a new list
@@ -41,6 +44,24 @@ public class MaliCraftPresenter {
         });
     }
 
+    public void chooseLeader() {
+        final List<Model> modelList = mModels.getLeaders(30, mCrew.build().getFaction());
+        mMaliCraftView.showModelList(modelList, new MaliCraftView.ModelChoiceListener() {
+            @Override
+            public void onModelChoice(Model model) {
+                mCrew.leader(model);
+                mMaliCraftView.showCrewList(mCrew.build(), mCrewListener);
+                mMaliCraftView.logMessage(String.format("%s selected", model));
+            }
+
+            @Override
+            public void onModelChoice(List<Model> models) {
+                //TODO re-think this api
+            }
+        });
+
+    }
+
     private static class MaliCraftCrewListener implements CrewFragment.CrewListener {
         private final MaliCraftPresenter mPresenter;
 
@@ -56,6 +77,11 @@ public class MaliCraftPresenter {
         @Override
         public void onFactionButtonClick() {
             mPresenter.chooseFaction();
+        }
+
+        @Override
+        public void onLeaderButtonClick() {
+            mPresenter.chooseLeader();
         }
     }
 }

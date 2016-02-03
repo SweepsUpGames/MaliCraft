@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nothingatall.malicraft.R;
+import com.nothingatall.malicraft.Util.Null;
 
 /**
  * fragment showing the crew view
@@ -19,6 +20,7 @@ import com.nothingatall.malicraft.R;
 public class CrewFragment extends Fragment {
     private EditText mCrewNameEditText;
     private TextView mCrewFactionView;
+    private TextView mCrewLeaderView;
 
     private CrewListener mCrewListener;
 
@@ -35,7 +37,7 @@ public class CrewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mCrewNameEditText = (EditText) view.findViewById(R.id.crew_name);
         mCrewNameEditText.setHint(mCrewList.getCrewName());
-        mCrewFactionView = (TextView) view.findViewById(R.id.factionChoice);
+        mCrewFactionView = (TextView) view.findViewById(R.id.faction_choice);
         mCrewFactionView.setText(mCrewList.getFaction().toString());
         mCrewFactionView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +45,26 @@ public class CrewFragment extends Fragment {
                 mCrewListener.onFactionButtonClick();
             }
         });
+        mCrewLeaderView = (TextView) view.findViewById(R.id.leader_choice);
+        mCrewLeaderView.setText(mCrewList.getLeader());
+        mCrewLeaderView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCrewListener.onLeaderButtonClick();
+            }
+        });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        if (Null.isNot(savedInstanceState)) {
+            //TODO handle case where the crew list is not in the bundle
+        }
+        super.onViewStateRestored(savedInstanceState);
     }
 
     public void initialize(CrewList crewList, CrewListener crewListener) {
@@ -52,7 +74,8 @@ public class CrewFragment extends Fragment {
 
     public interface CrewListener {
         void onCrewNameChange(String crewName);
-
         void onFactionButtonClick();
+
+        void onLeaderButtonClick();
     }
 }

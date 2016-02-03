@@ -1,5 +1,6 @@
 package com.nothingatall.malicraft.models;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import com.nothingatall.malicraft.core.Faction;
@@ -12,12 +13,24 @@ import java.util.Set;
  * Created by nothingatall on 1/26/2016.
  */
 public class Model {
+    public static final Model UNKNOWN_MODEL = new Model("Select a Leader", ImmutableSet.<Faction>of(), 0, 0, Level.PEON, ImmutableSet.<Status>of(), 1);
+
     public enum Level {
-        MASTER,
-        HENTCHMEN,
-        ENFORCER,
-        MINION,
-        PEON
+        MASTER(true),
+        HENTCHMEN(true),
+        ENFORCER(false),
+        MINION(false),
+        PEON(false);
+
+        private final boolean mLeader;
+
+        Level(boolean canLead) {
+            mLeader = canLead;
+        }
+
+        public boolean canLead() {
+            return mLeader;
+        }
     }
 
     public enum Status {
@@ -38,7 +51,7 @@ public class Model {
     private final Level mLevel;
     private final Iterable<Status> mStats;
 
-    private Model(String name, Iterable<Faction> faction, int cost, int cache, Level level, Iterable<Status> stats, int rare) {
+    private Model(String name, Set<Faction> faction, int cost, int cache, Level level, Set<Status> stats, int rare) {
         mName = name;
         mFactions = faction;
         mCost = cost;
@@ -107,5 +120,14 @@ public class Model {
 
     public boolean is(Faction faction) {
         return Iterables.contains(mFactions, faction);
+    }
+
+    public boolean canLead() {
+        return mLevel.canLead();
+    }
+
+    @Override
+    public String toString() {
+        return mName;
     }
 }

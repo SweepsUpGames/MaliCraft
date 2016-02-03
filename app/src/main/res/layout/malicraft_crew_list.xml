@@ -16,22 +16,31 @@
 
             <EditText
                 android:id="@+id/crew_name"
-                android:hint="@string/default_string"
-                android:textSize="26sp"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" />
+                android:hint="@string/default_string"
+                android:textSize="26sp" />
 
-            <Spinner
+            <EditText
+                android:id="@+id/crew_stones"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:entries="@array/ss_count"
-                android:prompt="@string/ss" />
+                android:hint="@string/ss"
+                android:textSize="26sp" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/factionChoice"
+            android:id="@+id/faction_choice"
+            android:text="@string/default_string"
+            android:textSize="26sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/leader_choice"
             android:text="@string/default_string"
             android:textSize="26sp"
             android:layout_width="match_parent"
